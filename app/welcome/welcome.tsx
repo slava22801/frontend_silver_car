@@ -24,6 +24,9 @@ export function Welcome() {
             <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
               What&apos;s next?
             </p>
+            <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
+              <a href="/cars">cars</a>
+            </p>
             <ul>
               {resources.map(({ href, text, icon }) => (
                 <li key={href}>

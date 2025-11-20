@@ -198,11 +198,12 @@ const CarFormBasic: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ maxWidth: '500px', margin: '20px' }}>
-      <h2>Добавить новое авто</h2>
+    <div className="p-6">
+      <form onSubmit={handleSubmit(onSubmit)} style={{ maxWidth: '500px', margin: '0 auto' }}>
+        <h2 className="text-white text-2xl font-bold mb-4">Добавить новое авто</h2>
 
         <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold', color: 'white' }}>
                 Фотография автомобиля
               </label>
               
@@ -307,7 +308,7 @@ const CarFormBasic: React.FC = () => {
       
       
       <div style={{ marginBottom: '15px' }}>
-        <label>Car Name:</label>
+        <label style={{ color: 'white' }}>Car Name:</label>
         <input
           type="text"
           {...register('name', { 
@@ -323,7 +324,7 @@ const CarFormBasic: React.FC = () => {
       </div>
 
       <div style={{ marginBottom: '15px' }}>
-        <label>Price:</label>
+        <label style={{ color: 'white' }}>Price:</label>
         <input
           type="number"
           {...register('price', { 
@@ -339,7 +340,7 @@ const CarFormBasic: React.FC = () => {
       </div>
 
       <div style={{ marginBottom: '15px' }}>
-        <label>Mileage:</label>
+        <label style={{ color: 'white' }}>Mileage:</label>
         <input
           type="number"
           {...register('mileage', { 
@@ -355,7 +356,7 @@ const CarFormBasic: React.FC = () => {
       </div>
 
       <div style={{ marginBottom: '15px' }}>
-        <label>Engine:</label>
+        <label style={{ color: 'white' }}>Engine:</label>
         <input
           type="text"
           {...register('engine', { required: 'Engine is required' })}
@@ -365,7 +366,7 @@ const CarFormBasic: React.FC = () => {
       </div>
 
       <div style={{ marginBottom: '15px' }}>
-        <label>Transmission Box:</label>
+        <label style={{ color: 'white' }}>Transmission Box:</label>
         <select
           {...register('transmition_box', { required: 'Transmission is required' })}
           style={{ width: '100%', padding: '8px', marginTop: '5px' }}
@@ -382,7 +383,7 @@ const CarFormBasic: React.FC = () => {
       </div>
 
       <div style={{ marginBottom: '15px' }}>
-        <label>Gear Type:</label>
+        <label style={{ color: 'white' }}>Gear Type:</label>
         <select
           {...register('gear', { required: 'Gear type is required' })}
           style={{ width: '100%', padding: '8px', marginTop: '5px' }}
@@ -396,7 +397,7 @@ const CarFormBasic: React.FC = () => {
       </div>
       
       <div style={{ marginBottom: '15px' }}>
-        <label>Руль:</label>
+        <label style={{ color: 'white' }}>Руль:</label>
         <select
           {...register('rudder', { required: 'Gear type is required' })}
           style={{ width: '100%', padding: '8px', marginTop: '5px' }}
@@ -409,7 +410,7 @@ const CarFormBasic: React.FC = () => {
       </div>
 
       <div style={{ marginBottom: '15px' }}>
-        <label>Кузов:</label>
+        <label style={{ color: 'white' }}>Кузов:</label>
         <select
           {...register('carcase', { required: 'Gear type is required' })}
           style={{ width: '100%', padding: '8px', marginTop: '5px' }}
@@ -424,7 +425,7 @@ const CarFormBasic: React.FC = () => {
 
 
       <div style={{ marginBottom: '15px' }}>
-        <label>Цвет:</label>
+        <label style={{ color: 'white' }}>Цвет:</label>
         <input
           type="text"
           {...register('color', { required: 'Color is required' })}
@@ -449,6 +450,7 @@ const CarFormBasic: React.FC = () => {
         {isSubmitting ? 'Добавление авто...' : 'Добавить авто'}
       </button>
     </form>
+    </div>
   );
 };
 

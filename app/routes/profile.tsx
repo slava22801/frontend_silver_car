@@ -146,16 +146,39 @@ export default function Profile() {
             <div className="bg-[#3A3839] rounded-2xl p-6 md:p-8 flex flex-col items-center w-full md:w-80 h-fit shrink-0">
               {/* Аватар */}
               <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gray-500 mb-4 md:mb-6 overflow-hidden flex items-center justify-center border-4 border-gray-400">
+                <style>{`
+                  @keyframes rotate {
+                    from {
+                      transform: rotate(0deg);
+                    }
+                    to {
+                      transform: rotate(360deg);
+                    }
+                  }
+                  .wheel-animation {
+                    animation: rotate 3s linear infinite;
+                  }
+                `}</style>
                 <svg
-                  className="w-16 h-16 md:w-24 md:h-24 text-gray-300"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+                  className="w-16 h-16 md:w-24 md:h-24 text-gray-300 wheel-animation"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 100 100"
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clipRule="evenodd"
-                  />
+                  {/* Внешний обод колеса */}
+                  <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="3" />
+                  {/* Центральная ступица */}
+                  <circle cx="50" cy="50" r="8" fill="currentColor" />
+                  {/* Спицы */}
+                  <line x1="50" y1="50" x2="50" y2="5" stroke="currentColor" strokeWidth="2" />
+                  <line x1="50" y1="50" x2="95" y2="50" stroke="currentColor" strokeWidth="2" />
+                  <line x1="50" y1="50" x2="50" y2="95" stroke="currentColor" strokeWidth="2" />
+                  <line x1="50" y1="50" x2="5" y2="50" stroke="currentColor" strokeWidth="2" />
+                  <line x1="50" y1="50" x2="77" y2="23" stroke="currentColor" strokeWidth="2" />
+                  <line x1="50" y1="50" x2="77" y2="77" stroke="currentColor" strokeWidth="2" />
+                  <line x1="50" y1="50" x2="23" y2="77" stroke="currentColor" strokeWidth="2" />
+                  <line x1="50" y1="50" x2="23" y2="23" stroke="currentColor" strokeWidth="2" />
                 </svg>
               </div>
               

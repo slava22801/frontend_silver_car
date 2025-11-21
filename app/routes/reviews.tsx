@@ -47,7 +47,7 @@ export default function Reviews() {
     const fetchReviews = async () => {
       try {
         setReviewsLoading(true);
-        const response = await fetch('http://127.0.0.1:8001/reviews');
+        const response = await fetch(`${API_URL}/reviews`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -59,6 +59,7 @@ export default function Reviews() {
         setReviews(reviewsArray);
       } catch (err) {
         console.error('Error fetching reviews:', err);
+        // В случае ошибки оставляем пустой массив, но не показываем ошибку пользователю
         setReviews([]);
       } finally {
         setReviewsLoading(false);
@@ -71,7 +72,7 @@ export default function Reviews() {
   // Обновление отзывов после успешной отправки
   const refreshReviews = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8001/reviews');
+      const response = await fetch(`${API_URL}/reviews`);
       
       if (response.ok) {
         const reviewsData = await response.json();
@@ -99,7 +100,7 @@ export default function Reviews() {
 
       console.log('Отправка данных:', submitData);
 
-      const response = await fetch('http://127.0.0.1:8001/reviews/add_review', {
+      const response = await fetch(`${API_URL}/reviews/add_review`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

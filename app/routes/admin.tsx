@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CarFormBasic from "~/components/AddAuto";
 import EditCar from "~/components/EditCar";
+import DeleteCar from "~/components/DeleteCar";
 import AdminSidebar from "~/components/AdminSidebar";
 import AdminProtectedRoute from "~/components/AdminProtectedRoute";
 
@@ -16,12 +17,7 @@ export default function Admin() {
             case "edit":
                 return <EditCar />;
             case "delete":
-                return (
-                    <div className="p-6">
-                        <h2 className="text-2xl font-bold mb-4 text-white">Удалить автомобиль</h2>
-                        <p className="text-white">Функция удаления будет реализована позже</p>
-                    </div>
-                );
+                return <DeleteCar />;
             case "users":
                 return (
                     <div className="p-6">
@@ -43,9 +39,9 @@ export default function Admin() {
 
     return (
         <AdminProtectedRoute>
-            <div className="flex min-h-screen">
+            <div className="flex flex-col md:flex-row min-h-screen">
                 <AdminSidebar activeAction={activeAction} onActionChange={setActiveAction} />
-                <div className="flex-1 bg-[#302E2F]">
+                <div className="flex-1 bg-[#302E2F] min-h-screen">
                     {renderContent()}
                 </div>
             </div>

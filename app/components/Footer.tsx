@@ -7,26 +7,26 @@ export default function Footer() {
                 {/* Верхняя секция: Логотип и навигация */}
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
                     {/* Логотип */}
-                    <div className="flex items-center space-x-4 mb-4 md:mb-0">
+                    <div className="flex items-center space-x-3 sm:space-x-4 mb-4 md:mb-0">
                         <Link to="/" className="flex flex-col items-center space-y-2">
                             <img 
                                 src="/logo.png" 
                                 alt="Silver Car Logo" 
-                                className="w-16 h-16"
+                                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16"
                             />
                         </Link>
-                        <h1 className="text-2xl font-bold font-sans">Silver car</h1>
+                        <h1 className="text-lg sm:text-xl md:text-2xl font-bold font-sans">Silver car</h1>
                     </div>
 
                     {/* Навигационные ссылки */}
-                    <nav className="flex space-x-6">
-                        <Link to="/aboutUs" className="text-base font-sans hover:text-yellow-400 transition-colors">
+                    <nav className="flex flex-wrap gap-3 sm:gap-4 md:gap-6">
+                        <Link to="/aboutUs" className="text-sm sm:text-base font-sans hover:text-yellow-400 transition-colors">
                             О нас
                         </Link>
-                        <Link to="/contacts" className="text-base font-sans hover:text-yellow-400 transition-colors">
+                        <Link to="/contacts" className="text-sm sm:text-base font-sans hover:text-yellow-400 transition-colors">
                             Контакты
                         </Link>
-                        <Link to="/reviews" className="text-base font-sans hover:text-yellow-400 transition-colors">
+                        <Link to="/reviews" className="text-sm sm:text-base font-sans hover:text-yellow-400 transition-colors">
                             Отзывы
                         </Link>
                     </nav>
@@ -53,23 +53,18 @@ export default function Footer() {
                 </div>
 
                 {/* Политики */}
-                <div className="mb-6 space-y-2">
-                    <Link to="/privacy" className="block text-sm font-sans hover:text-yellow-400 transition-colors">
-                        политика конфиденциальности
-                    </Link>
-                    <Link to="/service-policy" className="block text-sm font-sans hover:text-yellow-400 transition-colors">
-                        политика пользованием сервисом
-                    </Link>
-                    <Link to="/data-policy" className="block text-sm font-sans hover:text-yellow-400 transition-colors">
-                        политика обработки персональных данных
-                    </Link>
-                    <Link to="/consent" className="block text-sm font-sans hover:text-yellow-400 transition-colors">
-                        согласие на обработку персональных данных
-                    </Link>
+                <div className="mb-4 sm:mb-6 space-y-1 sm:space-y-2">
+                    <a 
+                        href="/Политика_конфиденциальности_официального_сайта.pdf" 
+                        download="Политика_конфиденциальности.pdf"
+                        className="block text-xs sm:text-sm font-sans hover:text-yellow-400 transition-colors cursor-pointer"
+                    >
+                        Политика сервиса Silver Car
+                    </a>
                 </div>
 
                 {/* Копирайт */}
-                <div className="text-base font-bold font-sans text-center md:text-left">
+                <div className="text-sm sm:text-base font-bold font-sans text-center md:text-left">
                     © 2025-2026. Все права защищены. Silver car.
                 </div>
             </div>

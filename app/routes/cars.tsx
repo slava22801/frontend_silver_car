@@ -69,12 +69,26 @@ export default function Cars() {
 
   return (
     <ProtectedRoute>
-      {loading && <div className="m-[100px]">Загрузка...</div>}
-      {error && <div className="m-[100px]">Ошибка: {error}</div>}
+      {loading && (
+        <div className="min-h-screen bg-[#302E2F] flex items-center justify-center p-4">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
+            <p className="text-white text-lg">Загрузка...</p>
+          </div>
+        </div>
+      )}
+      {error && (
+        <div className="min-h-screen bg-[#302E2F] flex items-center justify-center p-4">
+          <div className="bg-red-900 border border-red-700 rounded-lg p-6 text-center max-w-md">
+            <h2 className="text-xl font-bold text-red-200 mb-2">Ошибка</h2>
+            <p className="text-red-300">{error}</p>
+          </div>
+        </div>
+      )}
       {!loading && !error && (
-        <div className="m-[100px]">
-          <h1 className="text-2xl font-bold mb-6">Автомобили</h1>
-          <div className="grid grid-cols-3 gap-4">
+        <div className="min-h-screen bg-[#302E2F] p-4 sm:p-6 md:p-8 lg:p-[100px]">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 text-white">Автомобили</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {cars.map(car => {
               const imageUrl = getImageUrl(car);
               return (
@@ -106,11 +120,12 @@ export default function Cars() {
                       alt={car.name}
                       style={{
                         width: '100%',
-                        height: '200px',
+                        height: '180px',
                         objectFit: 'cover',
                         borderRadius: '4px',
                         marginBottom: '10px'
                       }}
+                      className="sm:h-[200px] lg:h-[220px]"
                       onError={(e) => {
                         // Если изображение не загрузилось, скрываем его
                         e.currentTarget.style.display = 'none';
@@ -120,7 +135,7 @@ export default function Cars() {
                     <div 
                       style={{
                         width: '100%',
-                        height: '200px',
+                        height: '180px',
                         backgroundColor: '#f0f0f0',
                         display: 'flex',
                         alignItems: 'center',
@@ -129,17 +144,18 @@ export default function Cars() {
                         marginBottom: '10px',
                         color: '#999'
                       }}
+                      className="sm:h-[200px] lg:h-[220px]"
                     >
                       Нет фото
                     </div>
                   )}
-                  <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}>{car.name}</h3>
-                  <p style={{ margin: '4px 0', fontSize: '16px', fontWeight: 'bold', color: '#007bff' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }} className="text-base sm:text-lg md:text-xl">{car.name}</h3>
+                  <p style={{ margin: '4px 0', fontSize: '14px', fontWeight: 'bold', color: '#007bff' }} className="text-sm sm:text-base md:text-lg">
                     ${car.price.toLocaleString()}
                   </p>
-                  <p style={{ margin: '4px 0', fontSize: '14px' }}>Пробег: {car.mileage.toLocaleString()} км</p>
-                  <p style={{ margin: '4px 0', fontSize: '14px' }}>Двигатель: {car.engine}</p>
-                  <p style={{ margin: '4px 0', fontSize: '14px' }}>КПП: {car.transmition_box}</p>
+                  <p style={{ margin: '4px 0', fontSize: '12px' }} className="text-xs sm:text-sm md:text-base">Пробег: {car.mileage.toLocaleString()} км</p>
+                  <p style={{ margin: '4px 0', fontSize: '12px' }} className="text-xs sm:text-sm md:text-base">Двигатель: {car.engine}</p>
+                  <p style={{ margin: '4px 0', fontSize: '12px' }} className="text-xs sm:text-sm md:text-base">КПП: {car.transmition_box}</p>
                 </Link>
               );
             })}

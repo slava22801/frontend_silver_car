@@ -1,6 +1,3 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-
 type ActionType = "add" | "edit" | "delete" | "users" | "main" | "exit";
 
 interface AdminSidebarProps {
@@ -9,13 +6,6 @@ interface AdminSidebarProps {
 }
 
 export default function AdminSidebar({ activeAction, onActionChange }: AdminSidebarProps) {
-  const navigate = useNavigate();
-
-  const handleExit = () => {
-    // Очистка токена и перенаправление
-    localStorage.removeItem("token");
-    navigate("/");
-  };
 
   const actions = [
     { id: "main" as ActionType, label: "Главное меню" },
@@ -23,33 +13,20 @@ export default function AdminSidebar({ activeAction, onActionChange }: AdminSide
     { id: "add" as ActionType, label: "Добавить" },
     { id: "edit" as ActionType, label: "Редактировать" },
     { id: "delete" as ActionType, label: "Удалить" },
-    { id: "exit" as ActionType, label: "Выход" },
   ];
 
   return (
-    <div className="bg-[#302E2F] min-h-screen w-64 p-6">
-      <h1 className="text-white text-2xl font-bold mb-6">Действия</h1>
-      <div className="flex flex-col space-y-2">
+    <div className="bg-[#302E2F] w-full md:w-64 min-h-auto md:min-h-screen p-4 md:p-6">
+      <h1 className="text-white text-lg sm:text-xl md:text-2xl font-bold mb-4 md:mb-6">Действия</h1>
+      <div className="flex flex-row md:flex-col flex-wrap md:flex-nowrap gap-2 md:space-y-2 md:space-x-0">
         {actions.map((action) => {
           const isActive = activeAction === action.id;
-          
-          if (action.id === "exit") {
-            return (
-              <button
-                key={action.id}
-                onClick={handleExit}
-                className="w-full text-left px-4 py-3 rounded-lg bg-black text-white font-medium hover:bg-gray-800 transition-colors"
-              >
-                {action.label}
-              </button>
-            );
-          }
 
           return (
             <button
               key={action.id}
               onClick={() => onActionChange(action.id)}
-              className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors ${
+              className={`flex-1 md:flex-none text-center md:text-left px-3 md:px-4 py-2 md:py-3 rounded-lg font-medium transition-colors text-sm md:text-base ${
                 isActive
                   ? "bg-gradient-to-br from-gray-400 via-gray-300 to-gray-500 text-gray-800 shadow-inner"
                   : "bg-black text-white hover:bg-gray-800"

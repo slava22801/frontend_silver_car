@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import ProtectedRoute from "~/components/ProtectedRoute";
-import { getUserId, getAuthToken, getTokenType } from "~/utils/auth";
+import { getUserId, getAuthToken, getTokenType, getUserEmail } from "~/utils/auth";
 
 // Компонент для отображения детальной информации об автомобиле
 
@@ -95,9 +95,27 @@ export default function About() {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
     
+    let processedValue = value;
+    
+    // Для поля number (телефон) - оставляем только цифры
+    if (name === 'number') {
+      // Удаляем все нецифровые символы
+      processedValue = value.replace(/\D/g, '');
+      
+      // Если начинается не с 8, заменяем первую цифру на 8
+      if (processedValue.length > 0 && processedValue[0] !== '8') {
+        processedValue = '8' + processedValue.replace(/^8/, '');
+      }
+      
+      // Ограничиваем длину до 11 символов
+      if (processedValue.length > 11) {
+        processedValue = processedValue.substring(0, 11);
+      }
+    }
+    
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : processedValue
     }));
     
     // Очищаем ошибку при изменении поля
@@ -118,6 +136,12 @@ export default function About() {
     
     if (!formData.number.trim()) {
       errors.number = "Поле обязательно для заполнения";
+    } else {
+      // Валидация российского формата телефона
+      const phoneRegex = /^8\d{10}$/;
+      if (!phoneRegex.test(formData.number)) {
+        errors.number = "Введите номер в формате 89011345678 (11 цифр, начинается с 8)";
+      }
     }
     
     if (!formData.consent) {
@@ -151,6 +175,14 @@ export default function About() {
           return;
         }
         
+        // Получаем email из JWT токена
+        const userEmail = getUserEmail();
+        if (!userEmail) {
+          alert("Ошибка: не удалось получить email из токена авторизации. Пожалуйста, войдите в систему.");
+          setIsSubmitting(false);
+          return;
+        }
+
         // Расшифровываем токен и берем id
         let from_id: number;
         let from_id_string: string;
@@ -194,6 +226,7 @@ export default function About() {
           from_id: from_id_string, // Используем строковое значение ID (может быть ObjectId)
           name: formData.name, // Обязательное поле
           number: formData.number, // Обязательное поле
+          email: userEmail, // Email из JWT токена
           auto_name: formData.auto_name,
           comment: formData.comment,
         };
@@ -348,7 +381,7 @@ export default function About() {
       {!loading && !error && car && (
         <div className="min-h-screen flex flex-col md:flex-row">
           {/* Левая часть - Фотография автомобиля (2/3 ширины) */}
-          <div className="w-full md:w-2/3 h-96 md:h-screen relative bg-gray-900">
+          <div className="w-full md:w-2/3 h-64 sm:h-80 md:h-96 lg:h-screen relative bg-gray-900">
             {imageUrl ? (
               <img 
                 src={imageUrl} 
@@ -360,34 +393,34 @@ export default function About() {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gray-800">
-                <p className="text-white">Изображение не найдено</p>
+                <p className="text-white text-sm sm:text-base">Изображение не найдено</p>
               </div>
             )}
           </div>
 
           {/* Правая часть - Информация (1/3 ширины) */}
-          <div className="w-full md:w-1/3 bg-[#1a1a1a] p-6 md:p-8 flex flex-col min-h-96 md:min-h-screen">
+          <div className="w-full md:w-1/3 bg-[#1a1a1a] p-4 sm:p-6 md:p-8 flex flex-col min-h-[400px] md:min-h-screen">
             {/* Название автомобиля */}
-            <h1 className="text-3xl font-bold text-white mb-6">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 md:mb-6">
               {car.name}
             </h1>
 
             {/* Цена */}
-            <div className="mb-8">
-              <p className="text-4xl font-bold text-yellow-400">
+            <div className="mb-6 md:mb-8">
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-yellow-400">
                 {formatPrice(car.price)}
               </p>
             </div>
 
             {/* Характеристики */}
-            <div className="flex-1 space-y-4">
+            <div className="flex-1 space-y-3 md:space-y-4">
               {carSpecs.map((spec, index) => (
-                <div key={index} className="border-b border-gray-600 pb-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-white text-sm font-medium">
+                <div key={index} className="border-b border-gray-600 pb-3 md:pb-4">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-0">
+                    <span className="text-white text-xs sm:text-sm font-medium">
                       {spec.label}
                     </span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white text-sm sm:text-base font-semibold">
                       {spec.value}
                     </span>
                   </div>
@@ -398,7 +431,7 @@ export default function About() {
             {/* Кнопка заказа */}
             <button
               onClick={handleOrder}
-              className="mt-8 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-4 px-6 rounded-lg transition-colors duration-200 text-lg w-full"
+              className="mt-6 md:mt-8 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-3 md:py-4 px-4 md:px-6 rounded-lg transition-colors duration-200 text-base md:text-lg w-full"
             >
               Заказать
             </button>
@@ -409,11 +442,11 @@ export default function About() {
       {/* Модальное окно с формой заказа */}
       {isModalOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-3 sm:p-4 overflow-y-auto"
           onClick={closeModal}
         >
           <div 
-            className="bg-black border-2 border-yellow-400 rounded-lg max-w-sm w-full p-5 relative"
+            className="bg-black border-2 border-yellow-400 rounded-lg max-w-sm w-full p-4 sm:p-5 relative my-4"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Кнопка закрытия */}
@@ -425,15 +458,15 @@ export default function About() {
             </button>
 
             {/* Заголовок */}
-            <h2 className="text-white text-xl font-bold uppercase text-center mb-5">
+            <h2 className="text-white text-lg sm:text-xl font-bold uppercase text-center mb-4 sm:mb-5">
               ЗАКАЗАТЬ ЗВОНОК
             </h2>
 
             {/* Форма */}
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
               {/* Поле "Представьтесь" */}
               <div>
-                <label className="block text-white mb-1.5 text-sm">
+                <label className="block text-white mb-1.5 text-xs sm:text-sm">
                   Представьтесь <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -442,7 +475,7 @@ export default function About() {
                   value={formData.name}
                   onChange={handleInputChange}
                   placeholder="Имя"
-                  className="w-full bg-transparent border border-white text-white px-3 py-1.5 rounded text-sm focus:outline-none focus:border-yellow-400"
+                  className="w-full bg-transparent border border-white text-white px-3 py-2 sm:py-1.5 rounded text-sm focus:outline-none focus:border-yellow-400"
                 />
                 {formErrors.name && (
                   <p className="text-red-500 text-xs mt-1">{formErrors.name}</p>
@@ -451,7 +484,7 @@ export default function About() {
 
               {/* Поле "Телефон" */}
               <div>
-                <label className="block text-white mb-1.5 text-sm">
+                <label className="block text-white mb-1.5 text-xs sm:text-sm">
                   Телефон <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -459,8 +492,11 @@ export default function About() {
                   name="number"
                   value={formData.number}
                   onChange={handleInputChange}
-                  placeholder="+7 (495) 000 00 00"
-                  className="w-full bg-transparent border border-white text-white px-3 py-1.5 rounded text-sm focus:outline-none focus:border-yellow-400"
+                  placeholder="89011345678"
+                  maxLength={11}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  className="w-full bg-transparent border border-white text-white px-3 py-2 sm:py-1.5 rounded text-sm focus:outline-none focus:border-yellow-400"
                 />
                 {formErrors.number && (
                   <p className="text-red-500 text-xs mt-1">{formErrors.number}</p>
@@ -469,14 +505,14 @@ export default function About() {
 
               {/* Выпадающий список "Выберите модель автомобиля" */}
               <div>
-                <label className="block text-white mb-1.5 text-sm">
+                <label className="block text-white mb-1.5 text-xs sm:text-sm">
                   Выберите модель автомобиля
                 </label>
                 <select
                   name="auto_name"
                   value={formData.auto_name}
                   onChange={handleInputChange}
-                  className="w-full bg-transparent border border-white text-white px-3 py-1.5 rounded text-sm focus:outline-none focus:border-yellow-400 appearance-none"
+                  className="w-full bg-transparent border border-white text-white px-3 py-2 sm:py-1.5 rounded text-sm focus:outline-none focus:border-yellow-400 appearance-none"
                 >
                   <option value="" className="bg-black">Марка:</option>
                   {car && <option value={car.name} className="bg-black">{car.name}</option>}
@@ -485,7 +521,7 @@ export default function About() {
 
               {/* Поле "Комментарий" */}
               <div>
-                <label className="block text-white mb-1.5 text-sm">
+                <label className="block text-white mb-1.5 text-xs sm:text-sm">
                   Комментарий
                 </label>
                 <textarea
@@ -493,20 +529,20 @@ export default function About() {
                   value={formData.comment}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full bg-transparent border border-white text-white px-3 py-1.5 rounded text-sm focus:outline-none focus:border-yellow-400 resize-none"
+                  className="w-full bg-transparent border border-white text-white px-3 py-2 sm:py-1.5 rounded text-sm focus:outline-none focus:border-yellow-400 resize-none"
                 />
               </div>
 
               {/* Чекбокс согласия */}
-              <div className="flex items-start">
+              <div className="flex items-start gap-2">
                 <input
                   type="checkbox"
                   name="consent"
                   checked={formData.consent}
                   onChange={handleInputChange}
-                  className="mt-0.5 mr-2 w-3.5 h-3.5 bg-transparent border border-white rounded focus:outline-none focus:border-yellow-400 shrink-0"
+                  className="mt-0.5 w-4 h-4 sm:w-3.5 sm:h-3.5 bg-transparent border border-white rounded focus:outline-none focus:border-yellow-400 shrink-0"
                 />
-                <label className="text-white text-xs">
+                <label className="text-white text-xs leading-tight">
                   Я даю согласие на обработку моих персональных данных в соответствии с условиями политики конфиденциальности
                 </label>
               </div>
@@ -518,7 +554,7 @@ export default function About() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 text-white font-bold py-2.5 px-4 rounded-lg hover:from-orange-600 hover:to-yellow-600 transition-all duration-200 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 text-white font-bold py-2.5 sm:py-3 px-4 rounded-lg hover:from-orange-600 hover:to-yellow-600 transition-all duration-200 text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Отправка...' : 'Отправить'}
               </button>

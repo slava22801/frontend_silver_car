@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ProtectedRoute from "~/components/ProtectedRoute";
 import { getAuthToken, getTokenType } from "~/utils/auth";
+import { API_URL } from "~/utils/config";
 
 interface Order {
   id: number;
@@ -32,7 +33,7 @@ export default function Manager() {
         setLoading(true);
         setError(null);
         
-        const response = await fetch('http://127.0.0.1:8001/orders');
+        const response = await fetch(`${API_URL}/orders`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -91,7 +92,7 @@ export default function Manager() {
         return;
       }
 
-      const response = await fetch(`http://127.0.0.1:8001/orders/${orderId}`, {
+      const response = await fetch(`${API_URL}/orders/${orderId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -134,7 +135,7 @@ export default function Manager() {
       alert(successMessage);
 
       // Обновляем список заказов
-      const ordersResponse = await fetch("http://127.0.0.1:8001/orders");
+      const ordersResponse = await fetch(`${API_URL}/orders`);
       if (ordersResponse.ok) {
         const updatedOrders = await ordersResponse.json();
         setOrders(updatedOrders);
@@ -168,7 +169,7 @@ export default function Manager() {
         return;
       }
 
-      const response = await fetch(`http://127.0.0.1:8001/orders/${orderId}`, {
+      const response = await fetch(`${API_URL}/orders/${orderId}`, {
         method: "DELETE",
         headers: {
           "Authorization": `${tokenType} ${accessToken}`,
@@ -209,7 +210,7 @@ export default function Manager() {
       alert(successMessage);
 
       // Обновляем список заказов
-      const ordersResponse = await fetch("http://127.0.0.1:8001/orders");
+      const ordersResponse = await fetch(`${API_URL}/orders`);
       if (ordersResponse.ok) {
         const updatedOrders = await ordersResponse.json();
         setOrders(updatedOrders);

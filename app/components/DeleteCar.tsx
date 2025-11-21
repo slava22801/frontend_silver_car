@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAuthToken, getTokenType } from "~/utils/auth";
+import { API_URL } from "~/utils/config";
 
 interface Car {
   id?: string;
@@ -32,7 +33,7 @@ export default function DeleteCar() {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('http://127.0.0.1:8001/cars');
+      const response = await fetch(`${API_URL}/cars`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -54,7 +55,7 @@ export default function DeleteCar() {
     if (car.photo_url) {
       return car.photo_url;
     } else if (car.photo_path) {
-      const baseUrl = 'http://127.0.0.1:8001';
+      const baseUrl = API_URL;
       return `${baseUrl}${car.photo_path}`;
     }
     return undefined;
@@ -87,7 +88,7 @@ export default function DeleteCar() {
       }
 
       // Отправляем DELETE запрос
-      const response = await fetch(`http://127.0.0.1:8001/cars/${carId}`, {
+      const response = await fetch(`${API_URL}/cars/${carId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `${tokenType} ${accessToken}`,

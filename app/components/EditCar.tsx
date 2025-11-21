@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { getAuthToken, getTokenType } from '~/utils/auth';
+import { API_URL } from '~/utils/config';
 
 interface Car {
   id?: string | number;
@@ -60,7 +61,7 @@ const EditCar: React.FC = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('http://127.0.0.1:8001/cars');
+      const response = await fetch(`${API_URL}/cars`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -97,7 +98,7 @@ const EditCar: React.FC = () => {
         if (car.photo_url) {
           setPreviewImage(car.photo_url);
         } else if (car.photo_path) {
-          setPreviewImage(`http://127.0.0.1:8001${car.photo_path}`);
+          setPreviewImage(`${API_URL}${car.photo_path}`);
         } else {
           setPreviewImage(null);
         }
@@ -114,7 +115,7 @@ const EditCar: React.FC = () => {
     if (car.photo_url) {
       return car.photo_url;
     } else if (car.photo_path) {
-      const baseUrl = 'http://127.0.0.1:8001';
+      const baseUrl = API_URL;
       return `${baseUrl}${car.photo_path}`;
     }
     return undefined;
@@ -175,7 +176,7 @@ const EditCar: React.FC = () => {
         return;
       }
 
-      const url = `http://127.0.0.1:8001/cars/${selectedCarId}`;
+      const url = `${API_URL}/cars/${selectedCarId}`;
       
       let response: Response;
       const headers: HeadersInit = {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router';
 import { isAuthenticated } from '~/utils/auth';
+import { API_URL } from '~/utils/config';
 
 interface EmailForm {
   email: string;
@@ -29,7 +30,7 @@ export default function ResetPass() {
   // Обработка первого этапа - отправка email
   const onEmailSubmit = async (data: EmailForm) => {
     try {
-      const response = await fetch('http://127.0.0.1:8001/user/forgot_password', {
+      const response = await fetch(`${API_URL}/user/forgot_password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +91,7 @@ export default function ResetPass() {
       let message = 'Ошибка при отправке запроса';
       
       if (error instanceof TypeError && error.message.includes('fetch')) {
-        message = 'Не удалось подключиться к серверу. Проверьте, что сервер запущен на http://127.0.0.1:8001';
+        message = 'Не удалось подключиться к серверу. Проверьте подключение к интернету.';
       } else if (error instanceof Error) {
         message = error.message;
       } else if (typeof error === 'string') {
@@ -107,7 +108,7 @@ export default function ResetPass() {
   // Обработка второго этапа - сброс пароля с токеном
   const onResetSubmit = async (data: ResetPasswordForm) => {
     try {
-      const response = await fetch('http://127.0.0.1:8001/user/reset_password', {
+      const response = await fetch(`${API_URL}/user/reset_password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -170,7 +171,7 @@ export default function ResetPass() {
       let message = 'Ошибка при сбросе пароля';
       
       if (error instanceof TypeError && error.message.includes('fetch')) {
-        message = 'Не удалось подключиться к серверу. Проверьте, что сервер запущен на http://127.0.0.1:8001';
+        message = 'Не удалось подключиться к серверу. Проверьте подключение к интернету.';
       } else if (error instanceof Error) {
         message = error.message;
       } else if (typeof error === 'string') {

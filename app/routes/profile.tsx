@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import ProtectedRoute from "~/components/ProtectedRoute";
 import { getUsername, getUserEmail, getUserIdAsString } from "~/utils/auth";
+import { API_URL } from "~/utils/config";
 
 interface Order {
   id: number;
@@ -43,7 +44,7 @@ export default function Profile() {
 
       try {
         setOrdersLoading(true);
-        const response = await fetch(`http://127.0.0.1:8001/orders/fromid/${id}`);
+        const response = await fetch(`${API_URL}/orders/fromid/${id}`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -105,7 +106,7 @@ export default function Profile() {
 
     try {
       setPasswordChangeLoading(true);
-      const response = await fetch("http://127.0.0.1:8001/user/change_password", {
+      const response = await fetch(`${API_URL}/user/change_password`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

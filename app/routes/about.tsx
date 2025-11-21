@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import ProtectedRoute from "~/components/ProtectedRoute";
 import { getUserId, getAuthToken, getTokenType, getUserEmail } from "~/utils/auth";
+import { API_URL } from "~/utils/config";
 
 // Компонент для отображения детальной информации об автомобиле
 
@@ -56,7 +57,7 @@ export default function About() {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`http://127.0.0.1:8001/cars/${id}`);
+        const response = await fetch(`${API_URL}/cars/${id}`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -237,7 +238,7 @@ export default function About() {
           'Authorization': `${tokenType} ${accessToken}`,
         };
         
-        const response = await fetch('http://127.0.0.1:8001/orders/add_order', {
+        const response = await fetch(`${API_URL}/orders/add_order`, {
           method: 'POST',
           headers: headers,
           body: JSON.stringify(submitData),
@@ -324,7 +325,7 @@ export default function About() {
     if (car.photo_url) {
       return car.photo_url;
     } else if (car.photo_path) {
-      const baseUrl = 'http://127.0.0.1:8001';
+      const baseUrl = API_URL;
       return `${baseUrl}${car.photo_path}`;
     }
     return undefined;

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router';
 import { isAuthenticated } from '~/utils/auth';
+import { API_URL } from '~/utils/config';
 
 interface RegisterForm {
   username: string;
@@ -28,7 +29,7 @@ export default function Register() {
   const onSubmit = async (data: RegisterForm) => {
     try {
       // Отправляем данные в формате JSON
-      const response = await fetch('http://127.0.0.1:8001/user/add_user', {
+      const response = await fetch(`${API_URL}/user/add_user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ export default function Register() {
       let message = 'Ошибка при регистрации';
       
       if (error instanceof TypeError && error.message.includes('fetch')) {
-        message = 'Не удалось подключиться к серверу. Проверьте, что сервер запущен на http://127.0.0.1:8001';
+        message = 'Не удалось подключиться к серверу. Проверьте подключение к интернету.';
       } else if (error instanceof Error) {
         message = error.message;
       } else if (typeof error === 'string') {

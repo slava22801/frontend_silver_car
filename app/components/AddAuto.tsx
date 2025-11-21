@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { API_URL } from '~/utils/config';
 
 interface CarForm {
   name: string;
@@ -133,7 +134,7 @@ const CarFormBasic: React.FC = () => {
       }
       
       // Отправляем FormData
-      const response = await fetch('http://127.0.0.1:8001/admin/add_car', {
+      const response = await fetch(`${API_URL}/admin/add_car`, {
         method: 'POST',
         body: formData, // Не устанавливаем Content-Type, браузер сделает это автоматически с boundary
       });
@@ -188,7 +189,7 @@ const CarFormBasic: React.FC = () => {
       let message = 'Ошибка при добавлении автомобиля';
       
       if (error instanceof TypeError && error.message.includes('fetch')) {
-        message = 'Не удалось подключиться к серверу. Проверьте, что сервер запущен на http://127.0.0.1:8001';
+        message = 'Не удалось подключиться к серверу. Проверьте подключение к интернету.';
       } else if (error instanceof Error) {
         message = error.message;
       }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import ProtectedRoute from "~/components/ProtectedRoute";
+import { API_URL } from "~/utils/config";
 
 export default function Cars() {
   interface Car {
@@ -34,7 +35,7 @@ export default function Cars() {
         setLoading(true);
         setError(null);
         
-        const response = await fetch('http://127.0.0.1:8001/cars');
+        const response = await fetch(`${API_URL}/cars`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -61,8 +62,7 @@ export default function Cars() {
       return car.photo_url;
     } else if (car.photo_path) {
       // Если есть относительный путь, добавляем базовый URL сервера
-      const baseUrl = 'http://127.0.0.1:8001';
-      return `${baseUrl}${car.photo_path}`;
+      return `${API_URL}${car.photo_path}`;
     }
     return undefined;
   };

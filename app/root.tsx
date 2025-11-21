@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import AnimatedWheel from "./components/AnimatedWheel";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -51,6 +52,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <>
+      <AnimatedWheel />
       <Header />
       <Outlet />
       <Footer />

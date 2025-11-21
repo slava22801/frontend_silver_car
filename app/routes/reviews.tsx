@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { API_URL } from '~/utils/config';
+import { isAuthenticated } from '~/utils/auth';
 
 interface ReviewForm {
   name: string;
@@ -246,10 +247,12 @@ export default function Reviews() {
 
       <div className="min-h-screen bg-[#302E2F] p-4 sm:p-6 md:p-8">
         <div className="container mx-auto max-w-3xl">
-          <div className="bg-[#3A3839] rounded-2xl p-6 md:p-8">
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8 text-center">
-              Оставить отзыв
-            </h1>
+          {/* Блок формы отзыва - только для авторизованных пользователей */}
+          {isAuthenticated() && (
+            <div className="bg-[#3A3839] rounded-2xl p-6 md:p-8 mb-8">
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8 text-center">
+                Оставить отзыв
+              </h1>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
             {/* Имя */}
@@ -422,11 +425,23 @@ export default function Reviews() {
               {isSubmitting ? 'Отправка...' : 'Отправить отзыв'}
             </button>
           </form>
-        </div>
-      </div>
+            </div>
+          )}
 
-      {/* Секция с отзывами */}
-      <div className="container mx-auto max-w-3xl mt-8 md:mt-12">
+          {/* Сообщение для неавторизованных пользователей */}
+          {!isAuthenticated() && (
+            <div className="bg-[#3A3839] rounded-2xl p-6 md:p-8 mb-8 text-center">
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 md:mb-6">
+                Отзывы
+              </h1>
+              <p className="text-white text-sm md:text-base mb-4">
+                Чтобы оставить отзыв, пожалуйста, войдите в систему.
+              </p>
+            </div>
+          )}
+
+          {/* Секция с отзывами */}
+          <div className="mt-8 md:mt-12">
         <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8 text-center">
           Отзывы
         </h2>
@@ -499,8 +514,9 @@ export default function Reviews() {
             </p>
           </div>
         )}
+          </div>
+        </div>
       </div>
-    </div>
     </>
   );
 }

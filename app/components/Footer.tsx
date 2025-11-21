@@ -20,10 +20,10 @@ export default function Footer() {
 
                     {/* Навигационные ссылки */}
                     <nav className="flex flex-wrap gap-3 sm:gap-4 md:gap-6">
-                        <Link to="/aboutUs" className="text-sm sm:text-base font-sans hover:text-yellow-400 transition-colors">
+                        <Link to="#text_main" className="text-sm sm:text-base font-sans hover:text-yellow-400 transition-colors">
                             О нас
                         </Link>
-                        <Link to="/contacts" className="text-sm sm:text-base font-sans hover:text-yellow-400 transition-colors">
+                        <Link to="" className="text-sm sm:text-base font-sans hover:text-yellow-400 transition-colors">
                             Контакты
                         </Link>
                         <Link to="/reviews" className="text-sm sm:text-base font-sans hover:text-yellow-400 transition-colors">
